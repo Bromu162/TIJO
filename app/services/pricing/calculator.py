@@ -1,5 +1,6 @@
+import math
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
 from app.core.config import settings
@@ -51,10 +52,8 @@ class PricingCalculator:
 
         # Normalize both datetimes to UTC-aware for safe subtraction
         if entry_time.tzinfo is None:
-            from datetime import timezone
             entry_time = entry_time.replace(tzinfo=timezone.utc)
         if resolved_exit.tzinfo is None:
-            from datetime import timezone
             resolved_exit = resolved_exit.replace(tzinfo=timezone.utc)
 
         total_duration = resolved_exit - entry_time
@@ -65,7 +64,6 @@ class PricingCalculator:
         strategy = self.get_strategy(spot_type)
         fee = strategy.calculate_fee(billable_duration)
 
-        import math
         charged_hours = (
             math.ceil(billable_duration.total_seconds() / 3600)
             if billable_duration.total_seconds() > 0

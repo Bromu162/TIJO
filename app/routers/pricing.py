@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 
 from app.core.config import settings
-from app.models.enums import SpotType
 from app.schemas.pricing import PricingInfoResponse, PricingRateRead
 from app.services.pricing.strategies import (
     DisabledPricingStrategy,

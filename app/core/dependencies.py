@@ -1,3 +1,4 @@
+from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -8,8 +9,6 @@ from app.repositories.ticket_repository import TicketRepository
 from app.services.parking_service import ParkingService
 from app.services.pricing.calculator import PricingCalculator
 from app.services.stats_service import StatsService
-
-from fastapi import Depends
 
 
 _time_provider: TimeProvider = SystemTimeProvider()

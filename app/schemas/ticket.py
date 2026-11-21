@@ -1,7 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from decimal import Decimal
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict
 
 from app.models.enums import PaymentMethod, SpotType, TicketStatus
 from app.schemas.spot import SpotRead

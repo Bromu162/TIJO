@@ -1,5 +1,3 @@
-from sqlalchemy.orm import Session
-
 from app.models.enums import SpotStatus, SpotType
 from app.repositories.payment_repository import PaymentRepository
 from app.repositories.spot_repository import SpotRepository

@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from app.core.config import settings
 from app.core.database import Base, SessionLocal, engine
 from app.core.error_handlers import register_error_handlers
-from app.models import payment, spot, ticket  # noqa: F401 — registers ORM models
+from app.models import Payment, Spot, Ticket
 from app.models.seed import seed_initial_spots
 from app.routers import pricing, spots, stats, tickets
 
