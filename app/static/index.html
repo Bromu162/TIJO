@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paid Parking Management System</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header__inner">
+      <div class="header__brand">
+        <span class="header__icon">🅿</span>
+        <h1 class="header__title">Parking Manager</h1>
+      </div>
+      <div class="stats-bar" id="statsBar">
+        <div class="stat-chip">
+          <span class="stat-chip__label">Total</span>
+          <span class="stat-chip__value" id="statTotal">—</span>
+        </div>
+        <div class="stat-chip stat-chip--free">
+          <span class="stat-chip__label">Free</span>
+          <span class="stat-chip__value" id="statFree">—</span>
+        </div>
+        <div class="stat-chip stat-chip--occupied">
+          <span class="stat-chip__label">Occupied</span>
+          <span class="stat-chip__value" id="statOccupied">—</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-chip__label">Occupancy</span>
+          <span class="stat-chip__value" id="statRate">—</span>
+        </div>
+        <div class="stat-chip stat-chip--revenue">
+          <span class="stat-chip__label">Revenue</span>
+          <span class="stat-chip__value" id="statRevenue">—</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tab-bar">
+    <button class="tab-btn tab-btn--active" data-tab="spots">Parking Spots</button>
+    <button class="tab-btn" data-tab="entry">Vehicle Entry</button>
+    <button class="tab-btn" data-tab="exit">Vehicle Exit</button>
+    <button class="tab-btn" data-tab="history">History</button>
+    <button class="tab-btn" data-tab="pricing">Pricing</button>
+  </nav>
+
+  <main class="main">
+
+    <!-- ===== SPOTS TAB ===== -->
+    <section id="tab-spots" class="tab-content tab-content--active">
+      <div class="section-header">
+        <h2>Parking Spots</h2>
+        <div class="filter-bar">
+          <button class="filter-btn filter-btn--active" data-filter="ALL">All</button>
+          <button class="filter-btn" data-filter="FREE">Free</button>
+          <button class="filter-btn" data-filter="OCCUPIED">Occupied</button>
+          <button class="filter-btn filter-btn--standard" data-filter="STANDARD">Standard</button>
+          <button class="filter-btn filter-btn--vip" data-filter="VIP">VIP</button>
+          <button class="filter-btn filter-btn--electric" data-filter="ELECTRIC">Electric</button>
+          <button class="filter-btn filter-btn--disabled" data-filter="DISABLED">Disabled</button>
+        </div>
+      </div>
+      <div class="spot-grid" id="spotGrid">
+        <div class="loading">Loading spots…</div>
+      </div>
+    </section>
+
+    <!-- ===== ENTRY TAB ===== -->
+    <section id="tab-entry" class="tab-content">
+      <div class="card form-card">
+        <h2>Register Vehicle Entry</h2>
+        <form id="entryForm" class="form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="entryPlate">License Plate</label>
+            <input class="form-input" id="entryPlate" type="text"
+              placeholder="e.g. KR12345" autocomplete="off" required />
+            <span class="form-hint">Alphanumeric, 2–10 characters</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="entryType">Spot Type</label>
+            <select class="form-select" id="entryType" required>
+              <option value="STANDARD">🚗 Standard — 5.00 PLN/h</option>
+              <option value="VIP">⭐ VIP — 12.00 PLN/h</option>
+              <option value="ELECTRIC">⚡ Electric — 8.00 PLN/h</option>
+              <option value="DISABLED">♿ Disabled — 2.50 PLN/h</option>
+            </select>
+          </div>
+          <button class="btn btn--primary" type="submit">🚦 Register Entry</button>
+        </form>
+        <div id="entryResult" class="result-box" hidden></div>
+      </div>
+    </section>
+
+    <!-- ===== EXIT TAB ===== -->
+    <section id="tab-exit" class="tab-content">
+      <div class="card form-card">
+        <h2>Vehicle Exit & Checkout</h2>
+
+        <div class="active-tickets-panel">
+          <h3>Active Parkings</h3>
+          <div id="activeTicketsList" class="tickets-list">
+            <div class="loading">Loading…</div>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <h3>Checkout by Ticket ID</h3>
+        <form id="exitSearchForm" class="form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="exitTicketId">Ticket ID</label>
+            <input class="form-input" id="exitTicketId" type="number"
+              placeholder="Enter ticket ID" min="1" required />
+          </div>
+          <button class="btn btn--secondary" type="submit">🔍 Preview Fee</button>
+        </form>
+
+        <div id="feePreview" class="fee-preview" hidden>
+          <h3>Fee Breakdown</h3>
+          <table class="fee-table" id="feeTable"></table>
+          <form id="payForm" class="form pay-form">
+            <div class="form-group">
+              <label class="form-label" for="paymentMethod">Payment Method</label>
+              <select class="form-select" id="paymentMethod">
+                <option value="CARD">💳 Card</option>
+                <option value="CASH">💵 Cash</option>
+                <option value="APP">📱 App</option>
+              </select>
+            </div>
+            <button class="btn btn--danger" type="submit">✅ Confirm Exit & Pay</button>
+          </form>
+        </div>
+
+        <div id="exitResult" class="result-box" hidden></div>
+      </div>
+    </section>
+
+    <!-- ===== HISTORY TAB ===== -->
+    <section id="tab-history" class="tab-content">
+      <div class="section-header">
+        <h2>Parking History</h2>
+        <button class="btn btn--ghost" id="refreshHistory">↻ Refresh</button>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table" id="historyTable">
+          <thead>
+            <tr>
+              <th>Ticket</th>
+              <th>Plate</th>
+              <th>Type</th>
+              <th>Entry</th>
+              <th>Exit</th>
+              <th>Duration</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody">
+            <tr><td colspan="8" class="loading">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== PRICING TAB ===== -->
+    <section id="tab-pricing" class="tab-content">
+      <div class="card">
+        <h2>Pricing Information</h2>
+        <div id="pricingInfo" class="loading">Loading…</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
