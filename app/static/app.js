@@ -390,7 +390,6 @@ async function init() {
 
   await Promise.all([loadSpots(), refreshStats()]);
 
-  // Refresh stats every 60 seconds
   setInterval(async () => {
     await Promise.all([loadSpots(), refreshStats()]);
   }, 60_000);
